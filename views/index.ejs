@@ -1,0 +1,180 @@
+
+<%layout('./styeling/boilerplate') %>
+<div id='map' style='width: 130%; height: 500px; margin-left: -130px; margin-top: -100px;'></div>
+
+
+<h1>All Campgrounds</h1>
+    <a href="/campground/new">Add A campground</a>
+    <ul id="paintings"
+    data-role="list"
+    data-sort-class="painting-price"
+    data-sort-dir="desc"
+    data-cls-list="unstyled-list row flex-justify-center mt-4"
+    data-cls-list-item="cell-sm-6 cell-md-4"
+>      
+   <style>
+    #klaus{
+      border: 0.2px #607d8b solid ;
+       
+    }
+   </style>
+        <%for(let campground of campgrounds){%>
+    
+    <li>
+        <form id="klaus"action="campground/<%=campground._id%>">
+       <div>        
+        <figure class="text-center">
+            <div class="img-container thumbnail">
+                <img src="<%=campground.images[0].url%>" alt="Gogen, When is the wedding">
+            </div>
+            
+            <figcaption class="painting-name"><h5><%=campground.title%></h5></figcaption>
+            <figcaption class="painting-author text-bold"><%=campground.des%></figcaption>
+            <figcaption class="painting-author text-bold"><%=campground.location%></figcaption>
+            <figcaption class="painting-price" data-format="money">$ <%=campground.price%>USD</figcaption>
+        </figure>
+        <div class="card-footer">
+            <button class="button secondary">Read More</button>
+        </div>
+        </div>
+    </form>
+    </li>
+
+        <%}%>
+    </ul>
+    <script>
+        
+        const campground ={features:<%- JSON.stringify(campgrounds) %>}
+     </script>
+<script>
+    const mapToken = "<%-process.env.MAPBOX_TOKEN%>";
+    mapboxgl.accessToken = mapToken;
+const map = new mapboxgl.Map({
+container: 'map',
+// Choose from Mapbox's core styles, or make your own style with Mapbox Studio
+style: 'mapbox://styles/mapbox/dark-v11',
+center: [-103.5917, 40.6699],
+zoom: 3.5
+});
+ 
+map.on('load', () => {
+// Add a new source from our GeoJSON data and
+// set the 'cluster' option to true. GL-JS will
+// add the point_count property to your source data.
+map.addSource('campgrounds', {
+type: 'geojson',
+// Point to GeoJSON data. This example visualizes all M1.0+ earthquakes
+// from 12/22/15 to 1/21/16 as logged by USGS' Earthquake hazards program.
+data: campground,
+cluster: true,
+clusterMaxZoom: 14, // Max zoom to cluster points on
+clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
+});
+ 
+map.addLayer({
+id: 'clusters',
+type: 'circle',
+source: 'campgrounds',
+filter: ['has', 'point_count'],
+paint: {
+// Use step expressions (https://docs.mapbox.com/style-spec/reference/expressions/#step)
+// with three steps to implement three types of circles:
+//   * Blue, 20px circles when point count is less than 100
+//   * Yellow, 30px circles when point count is between 100 and 750
+//   * Pink, 40px circles when point count is greater than or equal to 750
+'circle-color': [
+'step',
+['get', 'point_count'],
+'red',
+100,
+'orange',
+750,
+'yellow'
+],
+'circle-radius': [
+'step',
+['get', 'point_count'],
+20,
+100,
+30,
+750,
+40
+]
+}
+});
+ 
+map.addLayer({
+id: 'cluster-count',
+type: 'symbol',
+source: 'campgrounds',
+filter: ['has', 'point_count'],
+layout: {
+'text-field': ['get', 'point_count_abbreviated'],
+'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+'text-size': 12
+}
+});
+ 
+map.addLayer({
+id: 'unclustered-point',
+type: 'circle',
+source: 'campgrounds',
+filter: ['!', ['has', 'point_count']],
+paint: {
+'circle-color': '#11b4da',
+'circle-radius': 4,
+'circle-stroke-width': 1,
+'circle-stroke-color': '#fff'
+}
+});
+ 
+// inspect a cluster on click
+map.on('click', 'clusters', (e) => {
+const features = map.queryRenderedFeatures(e.point, {
+layers: ['clusters']
+});
+const clusterId = features[0].properties.cluster_id;
+map.getSource('campgrounds').getClusterExpansionZoom(
+clusterId,
+(err, zoom) => {
+if (err) return;
+ 
+map.easeTo({
+center: features[0].geometry.coordinates,
+zoom: zoom
+});
+}
+);
+});
+ 
+// When a click event occurs on a feature in
+// the unclustered-point layer, open a popup at
+// the location of the feature, with
+// description HTML from its properties.
+map.on('click', 'unclustered-point', (e) => {
+   const text = e.features[0].properties.popUpMarkup;
+    const coordinates = e.features[0].geometry.coordinates.slice();
+
+// Ensure that if the map is zoomed out such that
+// multiple copies of the feature are visible, the
+// popup appears over the copy being pointed to.
+while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+}
+ 
+new mapboxgl.Popup()
+.setLngLat(coordinates)
+.setHTML(
+text
+)
+.addTo(map);
+});
+ 
+map.on('mouseenter', 'clusters', () => {
+map.getCanvas().style.cursor = 'pointer';
+});
+map.on('mouseleave', 'clusters', () => {
+map.getCanvas().style.cursor = '';
+});
+});
+</script>

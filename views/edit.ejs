@@ -1,0 +1,55 @@
+<%layout('./styeling/boilerplate') %>
+<style>
+  #km{
+    color: white;
+  }
+</style>    
+
+<h1>Edit Campground</h1>
+    <form action="/campground/<%=campground._id%>?_method=PUT" method="POST" data-role="validator" enctype="multipart/form-data">
+      <p>Title</p>
+      <input type="text" data-role="input" name="campground[title]" value="<%=campground.title%>">  
+      <span class="invalid_feedback">
+        Input A Title
+    </span>
+          <p>Location</p>
+          <input type="text" data-role="input"data-validate="required" name="campground[location]" value="<%=campground.location%>"/>
+          <span class="invalid_feedback">
+            Input A Title
+        </span>
+          <p>Image (URL)</p>
+          <input type="file" data-role="file" data-mode="drop"  multiple name="image">
+          <span class="invalid_feedback">
+            Input A (URL)Image
+        </span>
+          <p>Price $USD</p>
+          <input type="text" data-role="input"data-validate="required" name="campground[price]" value="<%=campground.price%>">
+          <span class="invalid_feedback">
+            Input A Price
+        </span>
+          <p>Description</p>
+          <textarea data-role="textarea"data-validate="required" name="campground[des]" data-prepend="<span class='mif-leanpub'></span>"><%=campground.des%></textarea>
+          <span class="invalid_feedback">
+            Input A Description
+        </span>
+        <div class="card-footer">
+          <%campground.images.forEach(function(img,i){%>
+            <div class="image-compare" data-role="imagecompare" data-width="200" data-height="200">
+              <img src="<%=img.thumbnail%>">
+
+        </div>
+        <label for="image-<%=i%>"><h5>Delete</h5></label>
+
+        <input type="checkbox" id="image-<%=i%>" data-role="checkbox" name="deleteImages[]" value="<%=img.filename%>">
+
+            <%})%>
+        </div>
+          <div class="card-footer">
+          <button class="button secondary">Submit</button>
+          <div class="card-footer">
+            <button  class="button secondary"><a href="/campground/<%=campground._id%>" id="km">Back to Campground</a></button>
+          </div>
+          </div>
+
+          </form>
+      

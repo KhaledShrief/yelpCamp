@@ -1,0 +1,105 @@
+<%layout('./styeling/boilerplate') %>
+
+ <style>
+        #bg{
+            height: 400px;
+        }
+        #km{
+    color: white;
+    
+  }hr{
+    background-color:gray;
+  }
+       </style>
+
+    <h1><%=campground.title%></h1>
+      
+
+    <div class="card image-header">
+        <div data-role="carousel">
+        <%for(let img of campground.images){%>
+             
+                <div class="slide" data-cover="<%=img.url%>"></div>
+        
+        <%}%>
+    </div>
+
+        <h1><%=campground.title%></h1>
+            
+        <div class="card-content p-2">
+            
+            <p class="fg-gray"><%=campground.des%></p>
+        </div>
+        <div class="card-footer">
+            <div id='map' style='width: 1070px; height: 300px;'></div>
+            </div>
+            <div class="card-footer">
+            <h2>location:<%=campground.location%></h2>
+    
+        </div>
+            <div class="card-footer">
+                <h2>Price:<%=campground.price%>$USD</h2>
+                </div>
+
+        <div class="card-footer">
+              
+            <button class="button info "><a id="km" href="/campground/<%=campground._id%>/edit">Edit campground</a></button>
+            <form action="/campground/<%=campground._id%>?_method=DELETE" method="POST">
+                <button class="button alert">Delete</button>
+        </form>
+        
+        </div>
+        
+    </div>
+    <div>
+        <h2>Leave A Review</h2>
+        <form action="/campground/<%=campground._id%>/reviews" class="val" method="POST">
+            
+          <label for="review">Rate Us</label>
+          
+          <textarea data-role="textarea"
+          required
+          name="review[body]"
+          data-default-value=""
+          data-cls-textarea="bg-darkCyan fg-white"
+          data-prepend="<span class='mif-leanpub'></span>"
+          data-cls-prepend="bg-light"
+          data-clear-button-icon="<span class='mif-cross fg-white'></span>"></textarea>
+          <div class="card-footer">
+                <input data-role="rating" name="review[rating]"required>
+                <button class="button info ">Submit</button>
+          </div>
+        </form>
+    </div>
+    <div data-role="panel" data-width="1120" data-height="450">
+        
+        <%for(let review of campground.reviews){ %>
+                          
+             <h5>Rating: <%=review.rating%></h5>   
+            <p>review: <%=review.body%></p>
+            <form action="/campground/<%=campground._id%>/reviews/<%=review._id%>?_method=delete" method="POST">
+                <div class="card-footer">
+                <button class="button alert">Delete</button>
+                </div>
+            </form>
+            <hr>
+        <%}%>
+    </div>
+                   
+    <script>
+        const mapToken = "<%-process.env.MAPBOX_TOKEN%>";
+        const campground =<%- JSON.stringify(campground) %>
+     </script>
+    <script >
+        mapboxgl.accessToken = mapToken;
+const map = new mapboxgl.Map({
+    container: 'map', // container ID
+    style: 'mapbox://styles/mapbox/dark-v10', // style URL
+    center: campground.geometry.coordinates, // starting position [lng, lat]
+    zoom: 10, // starting zoom
+});
+new mapboxgl.Marker().setLngLat(campground.geometry.coordinates).setPopup(new mapboxgl.Popup({offset:25}).setHTML(`<h3>${campground.title}</h3>`)).addTo(map);
+    </script>   
+    
+       
+

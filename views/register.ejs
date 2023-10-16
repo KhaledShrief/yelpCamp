@@ -1,0 +1,27 @@
+<%layout('./styeling/boilerplate') %>
+
+<h1>Register</h1>
+<form action="/register" method="POST" data-role="validator">
+    <p>Username</p>
+    <input type="text" data-role="input" data-validate="required" name="username">
+    <span class="invalid_feedback">
+      Create A Username
+  </span>
+    <p>Email</p>
+    <input type="email" data-role="input"data-validate="required" name="email">
+    <span class="invalid_feedback">
+      Add An Email
+  </span>
+    <p>Password</p>
+    <input type="password" data-role="input"data-validate="required" name="password">
+    <span class="invalid_feedback">
+      Create A Password
+  </span>
+    
+
+    
+
+
+    <div class="card-footer">
+      <button class="button secondary">Register!</button>
+</form>

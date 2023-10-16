@@ -1,0 +1,20 @@
+<style>
+    h6{
+        margin-left:3%;
+    }
+</style>
+<div data-role="appbar" class="bg-dark fg-white">
+    <h6>  yelpCamp</h6>
+    <a href="/" class="app-bar-item">HOME</a>
+    <a href="/campground" class="app-bar-item">All Campgrounds</a>
+    <a href="/campground/new" class="app-bar-item">Add A Campground</a>
+
+    <ul class="app-bar-menu bg-dark fg-white">
+     <% if(!currentUser){%>
+    <li><a href="/register">Register</a></li>
+    <li><a href="/login">Login</a></li>
+    <%}else{%>
+    <li><a href="/logout">Logout</a></li>
+    <%}%>    
+</ul>
+</div>

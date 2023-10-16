@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Yelp Campground</title>
+    <link rel="stylesheet" href="https://cdn.korzh.com/metroui/v4/css/metro-all.min.css">
+    
+<script src='https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css' rel='stylesheet' />
+
+  </head>
+  <body>
+    <style>
+      .container{
+        margin-top: 100px;
+      }
+      h1{
+        text-align: center;
+        color: rgb(156, 95, 20);
+        
+      }
+      
+    </style>
+    
+    <%-include("../partials/navbar.ejs")%>
+    <%-include("../partials/flash.ejs")%>
+    <main class="container">
+      
+      <%- body %>
+      </main> 
+      <%-include("../partials/footer.ejs")%>   
+        
+      <script src="https://cdn.korzh.com/metroui/v4/js/metro.min.js"></script>
+    </body>
+</html>

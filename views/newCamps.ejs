@@ -1,0 +1,53 @@
+<%layout('./styeling/boilerplate') %>
+<style>
+  #km{
+    color: white;
+  }
+</style>      
+    
+    
+
+    <h1>Add new Campgrounds</h1>
+    <form action="/campground" method="POST" data-role="validator" enctype="multipart/form-data">
+    <p>Title</p>
+    <input type="text" data-role="input" data-validate="required" name="campground[title]">
+    <span class="invalid_feedback">
+      Input A Title
+  </span>
+    <p>Location</p>
+    <input type="text" data-role="input"data-validate="required" name="campground[location]">
+    <span class="invalid_feedback">
+      Input A Location
+  </span>
+    <!-- <p>Image (URL)</p>
+    <input type="file" data-role="input"data-validate="required" name="campground[image]">
+    <span class="invalid_feedback">
+      Input A (url)Image
+  </span> -->
+  <p>Image (URL)</p>
+  <input type="file" data-role="file" data-mode="drop" data-validate="required" multiple name="image">
+  <span class="invalid_feedback">
+    Input A (URL)Image
+</span>
+    <p>Price $USD</p>
+    <input type="text" data-role="input" data-validate="required"name="campground[price]">
+    <span class="invalid_feedback">
+      Input A Price
+  </span>
+    <p>Description</p>
+    <textarea data-role="textarea" name="campground[des]" data-validate="required"data-prepend="<span class='mif-leanpub'></span>"></textarea>
+    <span class="invalid_feedback">
+      Input A Description
+  </span>
+    
+
+    
+
+
+    <div class="card-footer">
+      <button class="button secondary">Add campground</button>
+  <div class="card-footer">
+    <button  class="button secondary"><a href="/campground" id="km">All Campgrounds</a></button>
+</form>
+
+    
