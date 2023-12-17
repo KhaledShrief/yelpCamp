@@ -4,7 +4,7 @@
 
 
 <h1>All Campgrounds</h1>
-    <a href="/campground/new">Add A campground</a>
+    <!-- <a href="/campground/new">Add A campground</a> -->
     <ul id="paintings"
     data-role="list"
     data-sort-class="painting-price"
@@ -18,6 +18,17 @@
        
     }body{
         background-color: #607d8b;
+    }h1{
+        color: #fff;
+    }
+    @media ( max-width: 1000px){
+       body{
+        width: fit-content;
+       }#map{
+        position: relative;
+        left:50px;
+       }
+         
     }
    </style>
         <%for(let campground of campgrounds){%>
