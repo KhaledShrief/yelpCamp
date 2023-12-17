@@ -25,7 +25,7 @@ const upload = multer({storage})
 const mongoSanitize = require("express-mongo-sanitize")
 const helmet = require("helmet")
 const MongoDBStore = require("connect-mongo")(session)
-const dbUrl = process.env.DB_URL || 'mongodb://127.0.0.1:27017/yelp-camp'
+const dbUrl =   process.env.DB_URL || 'mongodb://127.0.0.1:27017/yelp-camp'
 const secret = process.env.SECRET || "my secret"
 mongoose.connect(dbUrl,{
     // useNewUrlParser:true,
@@ -123,15 +123,16 @@ yelp.get("/campground/:id/edit", isLoggedin, tryCatch(campground.renderEdit))
 
 yelp.put("/campground/:id",upload.array("image"),tryCatch(campground.updateEdit))
 
-yelp.delete("/campground/:id", isLoggedin, tryCatch(campground.deleteForm))
+yelp.delete("/campground/:id", isLoggedin, tryCatch(campground.deleteForm)) 
+// k
 
 yelp.post("/campground/:id/reviews", isLoggedin,tryCatch(campground.updateReview))
 
 yelp.delete("/campground/:id/reviews/:reviewId", isLoggedin,tryCatch(campground.deleteReview))
 
-
-yelp.listen(3000,()=>{
-    console.log("hello from yelp listening to port 3000")
+const port = process.env.PORT || 3000
+yelp.listen(port,()=>{
+    console.log(`hello from yelp listening to port ${port}`)
 })
 
 
